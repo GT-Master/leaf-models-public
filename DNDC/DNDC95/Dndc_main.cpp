@@ -1442,6 +1442,8 @@ for(jday=1; jday<=365; jday++)
     // C/N pools at the end of each day 
     cn_pools(w_no3, w_nh4, w_nh3, wurea, wpool_no, w_n2o, w_n2);
 
+    write_out_daily_file();
+
 #ifdef BALANCE
     CheckBalance(2); //reserved
 #endif

@@ -1078,6 +1078,9 @@ public:
     
     int write_out_wb(int Batch, char *BatchFileName, char *PassC1);
     int multi_yr_record(int MODE, int Batch, float EndSOC, char *Pass, char *PassC1);
+
+    int write_out_daily_file();
+
     int write_out_annual_report(int MODE, float ha, int Batch, int livestock, FILE *fout, 
         FILE *fout2, int CL, float *FarmCropArea, float *FarmCropManureFraction, int drc, char *Pass, char *PassC1, char *PassL1);
     void MC_annu_accumu(void);

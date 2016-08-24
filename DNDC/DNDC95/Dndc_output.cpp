@@ -804,6 +804,28 @@ int File_Copy(char *source, char *dest)
     return 0;
 }
 
+int class_model::write_out_daily_file()
+{
+    FILE *fdaily=NULL;
+    char fpath[400];
+    sprintf( fpath, "%s\\Result\\Record\\Site\\DailyOut.csv", ROOTDIR );
+    fdaily = fopen( fpath, "a" );
+    if ( fdaily == NULL ) note(1,fpath);
+
+    if (jday == 1 && year == 1)
+    {
+        fprintf( fdaily, "year,day,no3_leach,h2o_leach,precip,"
+                "very_labile_litterC,labile_litterC,resistant_litterC,"
+                "microbialC,humadsC,humusC,inertC\n" );
+    }
+
+    fprintf(fdaily, "%3d,%3d,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f\n",
+            year, jday, day_leach_NO3, day_leach_water, day_water_in, wrcvl, wrcl, wrcr, wcrb, wcrhl+wcrhr, whumus, winertC);
+
+    fclose( fdaily );
+    return( 0 );
+}
+
 int class_model::write_out_wb(int Batch, char *BatchFileName, char *PassC1)
 {
     FILE *fout;
