@@ -74,10 +74,11 @@ int class_model::DNDC100go(int MODE, int SoilYear, float ha,
                         char* r_Province, int ZX, int Batch, int sample, int RRRRR, 
                         int IrriType, char* country_ID, int livestock, int Monitor, int drc,
                         int DroughtID, char f_region[6][150], char* DroughtYield, int FFN, 
-                        int FarmField, char *BatchPass)
+                        int FarmField, char *BatchPass, bool dailyoutput)
 #endif
 {
-
+    FILE *dailyfile;
+    char dailypath[400];
     FILE   *fc=NULL, *fn=NULL, *fw=NULL, *fcrop=NULL, *fEh=NULL, *fday=NULL,*fpp=NULL,*fWT=NULL;
     FILE   *fNB=NULL, *fCB=NULL, *fLAI=NULL, *fs=NULL, *fg=NULL, *fma=NULL, *HSM=NULL, *fsp=NULL, *fmb=NULL, *fis=NULL;
     FILE   *ftf1=NULL,*ftf2=NULL,*ftf3=NULL,*ftf4=NULL,*ftf5=NULL,*ftf6=NULL, *fclim=NULL, *ftf=NULL;
@@ -290,6 +291,12 @@ int class_model::DNDC100go(int MODE, int SoilYear, float ha,
     //FILE *fout, *fout2;
     CString DMW[4]={"","dry","mid","wet"};
 
+    if( dailyoutput )
+    {
+        sprintf( dailypath, "%s\\Result\\Record\\Site\\DailyOut_%d.csv", ROOTDIR, year );
+        dailyfile = fopen( dailypath, "w" );
+        if ( dailyfile == NULL ) note(1, dailypath );
+    }
 
     if(Batch==1)
     {
@@ -314,6 +321,7 @@ int class_model::DNDC100go(int MODE, int SoilYear, float ha,
 #else
 
         sprintf(YR, "%s\\AnnualReport_CroppingSystem_Yr%d.txt", Pass, year);
+
 #endif
 
 #endif
@@ -1442,7 +1450,11 @@ for(jday=1; jday<=365; jday++)
     // C/N pools at the end of each day 
     cn_pools(w_no3, w_nh4, w_nh3, wurea, wpool_no, w_n2o, w_n2);
 
-    write_out_daily_file();
+    if( dailyoutput )
+    {
+        soc_distribution(CRB1, CRB2, newh );
+        write_out_daily_file( dailyfile, jday, S_ThisYear );
+    }
 
 #ifdef BALANCE
     CheckBalance(2); //reserved
@@ -1593,6 +1605,11 @@ for(jday=1; jday<=365; jday++)
     
 } // daily loop end
 fclose( fday );
+
+if( dailyoutput )
+{
+    fclose( dailyfile );
+}
 
 if(WaterControl==2) fclose(fWT);
 //if(mm_ProductionOption==1) fclose(fLV);

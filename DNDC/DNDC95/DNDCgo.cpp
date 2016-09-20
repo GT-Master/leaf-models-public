@@ -84,7 +84,7 @@ int Model_link(  int scale, char* cropping_system, int S_SoilYear, int S_ThisYea
                         int StartYear, int ifdaily, int MonteCarlo, int ZXH, int Batch, 
                         int GlobeData, char* DirRoot, int sample, int RRRRR, int IrriType, 
                         char* country_ID, int livestock, int Monitor, int DroughtID, 
-                        char f_region[6][150], char* DroughtYield, int FFN, char *BatchPass)
+                        char f_region[6][150], char* DroughtYield, int FFN, char *BatchPass, bool dailyoutput )
 #endif
 {
 
@@ -201,7 +201,7 @@ int Model_link(  int scale, char* cropping_system, int S_SoilYear, int S_ThisYea
                     DNDC->DNDC100go(scale, S_SoilYear, ha, cropping_system, ProvinceOrder, 
                             S_county, CountyIDX, landuse, MonteCarlo, scale, ThisYear, 
                             r_Province, ZXH, Batch, sample, RRRRR, IrriType, country_ID, livestock,
-                            Monitor, drc, DroughtID, f_region, DroughtYield, FFN, FarmField, BatchPass); 
+                            Monitor, drc, DroughtID, f_region, DroughtYield, FFN, FarmField, BatchPass, dailyoutput); 
 #endif					
                     delete DNDC; 
                 }	

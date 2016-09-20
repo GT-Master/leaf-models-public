@@ -804,25 +804,20 @@ int File_Copy(char *source, char *dest)
     return 0;
 }
 
-int class_model::write_out_daily_file()
+int class_model::write_out_daily_file( FILE *dailyout, int day, int year )
 {
-    FILE *fdaily=NULL;
-    char fpath[400];
-    sprintf( fpath, "%s\\Result\\Record\\Site\\DailyOut.csv", ROOTDIR );
-    fdaily = fopen( fpath, "a" );
-    if ( fdaily == NULL ) note(1,fpath);
-
-    if (jday == 1 && year == 1)
+    if (jday == 1)
     {
-        fprintf( fdaily, "year,day,no3_leach,h2o_leach,precip,"
+        fprintf( dailyout, "year,day,no3_leach,h2o_leach,precip,"
                 "very_labile_litterC,labile_litterC,resistant_litterC,"
-                "microbialC,humadsC,humusC,inertC\n" );
+                "microbialC,labile_humadsC,resistant_humadsC,humusC,inertC,"
+                "frozen_doc,wtc_avail,ch4C\n" );
     }
 
-    fprintf(fdaily, "%3d,%3d,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f\n",
-            year, jday, day_leach_NO3, day_leach_water, day_water_in, wrcvl, wrcl, wrcr, wcrb, wcrhl+wcrhr, whumus, winertC);
+    fprintf( dailyout, "%3d,%3d,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f\n",
+            year, jday, day_leach_NO3, day_leach_water * 1000, precipitation * 1000,
+            wrcvl, wrcl, wrcr, wcrb, wcrhl, wcrhr, whumus, winertC, wFreezedoc, wtcavai, wCH4_C );
 
-    fclose( fdaily );
     return( 0 );
 }
 

@@ -1012,7 +1012,7 @@ public:
                int MonteCarlo, int scale, int S_ThisYear, char* r_Province, int ZXH, int Batch, 
                int sampple, int RRRRR, int IrriType, char* country_ID, int livestock, int Monitor,
                int drc, int DroughtID, char f_region[6][150], char* DroughtYield, int FFN, int FarmField,
-               char *BatchPass);
+               char *BatchPass, bool outputdaily );
 #endif
 
     int DNDC101go(MODEL_LINK_INFO* pLinkInfo, int MODE, int SoilYear, float ha, char* cropping_system, 
@@ -1078,8 +1078,6 @@ public:
     
     int write_out_wb(int Batch, char *BatchFileName, char *PassC1);
     int multi_yr_record(int MODE, int Batch, float EndSOC, char *Pass, char *PassC1);
-
-    int write_out_daily_file();
 
     int write_out_annual_report(int MODE, float ha, int Batch, int livestock, FILE *fout, 
         FILE *fout2, int CL, float *FarmCropArea, float *FarmCropManureFraction, int drc, char *Pass, char *PassC1, char *PassL1);
@@ -1337,6 +1335,8 @@ public:
     void write_out_dayCB(FILE *fCB, FILE *fNB);
     int write_out_daysp( FILE *fsp );
     int write_out_daymicrobe(FILE *fmb);
+
+    int write_out_daily_file( FILE *dailyout, int day, int year );
 
 #ifdef ISOTOPE
     int write_out_dayisotope(FILE *fis);

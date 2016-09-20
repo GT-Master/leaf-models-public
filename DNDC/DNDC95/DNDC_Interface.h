@@ -226,4 +226,5 @@ int Model_link(
     int StartYear, int ifdaily, int MonteCarlo, int ZXH, int Batch,
     int GlobeData, char* DirRoot, int sample, int RRRRR, int IrriType,
     char* country_ID, int livestock, int Monitor, int DroughtID,
-    char f_region[6][150], char* DroughtYield, int FFN, char *BatchPass );
+    char f_region[6][150], char* DroughtYield, int FFN, char *BatchPass,
+    bool dailyoutput );
