@@ -4,6 +4,8 @@
 #include "Dndc_tool.h"
 #include <stdio.h>
 
+#include <iostream>
+
 #include "RunPaths.h"
 
 #ifdef MANURE
@@ -808,15 +810,35 @@ int class_model::write_out_daily_file( FILE *dailyout, int day, int year )
 {
     if (jday == 1)
     {
-        fprintf( dailyout, "year,day,no3_leach,h2o_leach,precip,"
+        fprintf( dailyout, "year,day,no3_leach,n2o_flux,h2o_leach,precip,"
                 "very_labile_litterC,labile_litterC,resistant_litterC,"
                 "microbialC,labile_humadsC,resistant_humadsC,humusC,inertC,"
-                "frozen_doc,wtc_avail,ch4C\n" );
+                "frozen_doc,wtc_avail,ch4C,soil_ph,soil_temp,wfps,soil_nh3,nh3_vol\n" );
     }
 
-    fprintf( dailyout, "%3d,%3d,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f,%7.2f\n",
-            year, jday, day_leach_NO3, day_leach_water * 1000, precipitation * 1000,
-            wrcvl, wrcl, wrcr, wcrb, wcrhl, wcrhr, whumus, winertC, wFreezedoc, wtcavai, wCH4_C );
+    int BL = 1;
+    int EL = q;
+
+    float ave_ph( 0.0 );
+    float ave_temp( 0.0 );
+    float ave_wfps( 0.0 );
+    float ave_nh3( 0.0 );
+    for ( int l = BL; l <= EL; l++ )
+    {
+        ave_ph += sph[l];
+        ave_temp += temp[l];
+        ave_wfps += day_wfps[l];
+        ave_nh3 += nh3[l];
+    }
+    ave_ph = ave_ph/EL;
+    ave_temp = ave_temp/EL;
+    ave_wfps = ave_wfps/EL;
+    ave_nh3 = ave_nh3/EL;
+
+    fprintf( dailyout, "%3d,%3d,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f,%7.4f\n",
+            year, jday, day_leach_NO3, day_soil_an_n2o, day_leach_water * 1000, precipitation * 1000,
+            wrcvl, wrcl, wrcr, wcrb, wcrhl, wcrhr, whumus, winertC, wFreezedoc,
+            wtcavai, wCH4_C, ave_ph, ave_temp, ave_wfps, ave_nh3, ( day_soil_nh3+day_vol_nh3 ) );
 
     return( 0 );
 }

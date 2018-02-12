@@ -539,6 +539,7 @@ void ReadInputDatafromDND( const char *InputFileName )
         }
         else
         {
+            strcpy( ClimateFilename[w], "" );
             strcat( ClimateFilename[w], ROOTDIR );
             strcat( ClimateFilename[w], "\\" );
             strcat( ClimateFilename[w], tmpstr );
@@ -631,7 +632,7 @@ void ReadInputDatafromDND( const char *InputFileName )
         float ManuAmount, ManuCN, ManuN;
 
         fscanf(fp,"%s %d", notes, &ri);// "Rotation_ID"
-        fscanf(fp,"%s %d", notes, &db_TotalYear);//Totalyear=	
+        fscanf(fp,"%s %d", notes, &db_TotalYear);//Totalyear=
         fscanf(fp,"%s %d", notes, &db_CycleYear[i]);//Years_Of_A_Cycle=
                 
         sprintf(DB, "%s\\CropRotation_%d.txt", FCT60, i);
@@ -657,8 +658,7 @@ void ReadInputDatafromDND( const char *InputFileName )
             cropdb=fopen(CropDB, "w");
             if(cropdb==NULL) note(0, CropDB);
             
-            fscanf(fp,"%s",notes);//YearID_of_a_cycle=
-            fscanf(fp,"%d",&yc);	
+            fscanf(fp,"%s %d",notes, &yc);//YearID_of_a_cycle=
             fscanf(fp,"%s %d", notes,&cropn);//Crop_total_Number=
                                 
             fprintf(cropdb, "%d\n", cropn);
@@ -666,8 +666,8 @@ void ReadInputDatafromDND( const char *InputFileName )
             for (k=1;k<=cropn;k++) //crop type loop
             {
                 fscanf(fp,"%s",notes);//Crop_ID= 
-                fscanf(fp,"%d",&temp);					
-                fscanf(fp,"%s %d",notes,&db_Type);//Crop_Type= 
+                fscanf(fp,"%d",&temp);
+                fscanf(fp,"%s %d",notes, &db_Type);//Crop_Type= 
                 fscanf(fp,"%s %d %d",notes, &db_Pmonth , &db_Pday);//Plant_time=
                 fscanf(fp,"%s %d %d",notes,&db_Hmonth , &db_Hday);//Harvest_time=
                 fscanf(fp,"%s %d",notes,&db_Hyear);//Year_of_harvest=
@@ -702,7 +702,7 @@ void ReadInputDatafromDND( const char *InputFileName )
                 fscanf(fp,"%s", notes);//Perennial_crop=
                 if(strcmp(notes, "Perennial_crop=")!=0) 
                 { 
-                    //std::cout << "Error in Input data"  << std::endl;
+                    std::cout << "Error in Input data"  << std::endl;
                     exit(1);
                 
                 }
@@ -875,7 +875,7 @@ void ReadInputDatafromDND( const char *InputFileName )
 
             for (k=1;k<=manun;k++) 
             {
-                //fscanf(fp,"%s %d", notes,&temp);//Manure_ID
+                fscanf(fp,"%s %d", notes,&temp);//Manure_ID
                 //std::cout << temp << std::endl;
                 fscanf(fp,"%s %d %d", notes,&ManuMonth, &ManuDay);//Month/Day
                 fscanf(fp,"%s %f %f", notes,&ManuAmount, &ManuCN);//Amount/CN ratio
